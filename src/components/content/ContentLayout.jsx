@@ -16,7 +16,7 @@ const ContentLayout = () => {
               <div className="flex  w-[746px]">
                 {subBatch.subItems.map((sub, subIndex) => (
                   <ContentItem
-                    key={`subItem-${sub.id}-${subIndex}`}
+                    key={`batch-${batchIndex}-subBatch-${subBatchIndex}-item-${subIndex}`}
                     item={sub}
                   />
                 ))}
@@ -29,7 +29,7 @@ const ContentLayout = () => {
             <div className="flex gap-6 flex-wrap">
               {batch.subItems.map((sub, subIndex) => (
                 <ContentItem
-                  key={`subItem-${sub.id}-${subIndex}`}
+                  key={`batch-${batchIndex}-item-${subIndex}`}
                   item={sub}
                 />
               ))}
