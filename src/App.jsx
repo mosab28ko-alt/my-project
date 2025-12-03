@@ -16,7 +16,7 @@ function App() {
         <SidebarLayout />
 
         {/* اليمين: هيدر فوق + محتوى تحت */}
-        <div className="right-side ">
+        <div className="right-side bg-[rgb(244, 245, 247)]">
 
           {/* الهيدر */}
           <HeaderLayout />
