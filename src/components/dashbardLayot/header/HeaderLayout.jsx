@@ -8,8 +8,8 @@ const HeaderLayout = () => {
   const SearchIcon = searchConfig.icon;
 
   return (
-    <div className="header w-[1180px] h-[78px] bg-[rgb(8, 19, 41)]">
-      <header className="w-[1132px] h-[62px]  shadow-md flex items-center justify-between px-4 rounded bg-white">
+    <div className="header header w-full h-[78px] bg-[rgb(8, 19, 41)]">
+      <header className="w-full h-[62px]  shadow-md flex items-center justify-between  rounded bg-white">
 
         {/* البحث */}
         <div className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-full w-1/3 bg-white">

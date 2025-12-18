@@ -1,7 +1,7 @@
 .app-container {
   display: flex;
   height: 100vh;
-  width: 1440px;
+  width: 100%;
 
 }
 
@@ -41,7 +41,6 @@
   border-bottom: 1px solid #ddd;
   display: flex;
   align-items: center;
-  padding: 0 20px;
 }
 
 /* المحتوى تحت الهيدر */
@@ -57,4 +56,62 @@
 
 .content::-webkit-scrollbar {
   display: none;
+}
+
+/* ===== Animations for Landing Page ===== */
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Pulse animation for background elements */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+/* Bounce animation for scroll indicator */
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+/* Smooth transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
