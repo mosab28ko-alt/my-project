@@ -3,60 +3,71 @@ import { useNavigate } from 'react-router-dom';
 import { useCheckout } from '../../../hooks/useCheckout';
 import { useCart } from '../../../hooks/useCart';
 
-// استيراد الأيقونات المتنوعة من مكتبة react-icons
-import { 
-  FaHome, 
-  FaBriefcase, 
-  FaTruck, 
-  FaBolt, 
-  FaRocket, 
-  FaPlus,
-  FaCalendarAlt // أيقونة للتاريخ المتوقع
-} from 'react-icons/fa';
-
-import { 
-  MdEdit, 
-  MdDelete, 
-  MdSmartphone, // أيقونة للموبايل
-  MdLocationOn   // أيقونة للموقع
-} from 'react-icons/md';
-
-import { 
-  AiOutlineCheckCircle // أيقونة تأكيد الطلب
-} from 'react-icons/ai';
+import { FaHome, FaBriefcase } from 'react-icons/fa';
+import { CiUser, CiStar } from "react-icons/ci";
+import { BiCrown } from "react-icons/bi";
 
 const Payment = () => {
     const { savePaymentMethod, completeOrder } = useCheckout();
     const { cartTotal, clearCart } = useCart();
     const navigate = useNavigate();
 
-    const [selectedAddress, setSelectedAddress] = useState('home');
-    const [shippingSpeed, setShippingSpeed] = useState('standard');
-
-    const addresses = [
+    // جعلنا العناوين حالة (State) لكي نتمكن من الحذف والإضافة
+    const [addresses, setAddresses] = useState([
         {
             id: 'home',
             name: 'John Doe (Default)',
             tag: 'Home',
             icon: <FaHome className="text-blue-500" />,
-            details: '405 Parkway Street, Los Angeles, CA, 90012.',
-            mobile: '1234567890',
+            details: '4135 parkway Street, Los Angeles, CA,90017.',
+            mobile: 'Mobile:1234567890 Cash / Card on delivery available ',
         },
         {
             id: 'office',
             name: 'John Doe',
             tag: 'Office',
             icon: <FaBriefcase className="text-green-500" />,
-            details: '122, My Street, Kingston, New York 12401.',
-            mobile: '1234567890',
+            details: '123, My Street, Kingston, New York 12401.',
+            mobile: 'Mobile:1234567890 Cash / Card on delivery available',
         }
-    ];
+    ]);
+
+    const [selectedAddress, setSelectedAddress] = useState('home');
+    const [shippingSpeed, setShippingSpeed] = useState('standard');
 
     const shippingOptions = [
-        { id: 'standard', title: 'Standard', desc: '1 Week', price: 0, icon: <FaTruck className="text-blue-500" /> },
-        { id: 'express', title: 'Express', desc: '4 days', price: 10, icon: <FaBolt className="text-yellow-500" /> },
-        { id: 'overnight', title: 'Overnight', desc: '1 day', price: 15, icon: <FaRocket className="text-purple-500" /> },
+        { id: 'standard', title: 'Standard', desc: '1 Week', price: 0, icon: <CiUser className="text-blue-500" /> },
+        { id: 'express', title: 'Express', desc: '4 days', price: 10, icon: <CiStar className="text-black-500" /> },
+        { id: 'overnight', title: 'Overnight', desc: '1 day', price: 15, icon: <BiCrown className="text-black-500" /> },
     ];
+
+    const cartItems = [
+        { id: 1, name: "Google Home - White", deliveryDate: "18th Nov 2021" },
+        { id: 2, name: "Apple iPhone 11 (64GB, Black)", deliveryDate: "20th Nov 2021" },
+    ];
+
+    // وظيفة حذف العنوان
+    const handleRemoveAddress = (e, id) => {
+        e.stopPropagation(); // لمنع تفعيل اختيار العنوان عند الضغط على حذف
+        const updatedAddresses = addresses.filter(addr => addr.id !== id);
+        setAddresses(updatedAddresses);
+        if (selectedAddress === id && updatedAddresses.length > 0) {
+            setSelectedAddress(updatedAddresses[0].id);
+        }
+    };
+
+    // وظيفة إضافة عنوان جديد (مثال)
+    const handleAddNewAddress = () => {
+        const newAddr = {
+            id: Date.now().toString(),
+            name: 'New Address',
+            tag: 'Other',
+            icon: <CiUser className="text-purple-500" />,
+            details: 'New Location Details Street, City, 10001.',
+            mobile: 'Mobile: 0000000000',
+        };
+        setAddresses([...addresses, newAddr]);
+    };
 
     const currentShippingCost = shippingOptions.find(opt => opt.id === shippingSpeed).price;
     const finalTotal = cartTotal + currentShippingCost;
@@ -69,16 +80,14 @@ const Payment = () => {
     };
 
     return (
-        <div className="bg-[#f8f7fa] min-h-screen p-4 md:p-8 font-sans text-[#444050]">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="bg-white min-h-screen font-sans text-[#444050]">
+            <div className="mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                {/* الجزء الأيسر: العناوين والشحن */}
                 <div className="lg:col-span-2 space-y-6">
-                    
                     {/* اختيار العنوان */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div className="bg-white p-6 rounded-lg border-0 border border-gray-100">
                         <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
-                            <MdLocationOn className="text-indigo-600" /> Select your preferable address
+                            Select your preferable address
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {addresses.map((addr) => (
@@ -101,29 +110,36 @@ const Payment = () => {
                                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase flex items-center gap-1 ${
                                             addr.tag === 'Home' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'
                                         }`}>
-                                            {addr.icon} {addr.tag}
+                                           {addr.tag}
                                         </span>
                                     </div>
-                                    <p className="text-xs text-gray-500 mb-2 leading-relaxed h-8 line-clamp-2">{addr.details}</p>
-                                    <p className="text-xs font-semibold text-gray-600 flex items-center gap-1">
-                                        <MdSmartphone className="text-gray-400" /> {addr.mobile}
-                                    </p>
+                                    <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{addr.details}</p>
+                                    <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{addr.mobile}</p>
+                                    
                                     <div className="mt-4 pt-3 border-t border-gray-50 flex gap-4 text-[11px] font-bold text-indigo-600 uppercase">
-                                        <button className="flex items-center gap-1 hover:text-indigo-800"><MdEdit size={14}/> Edit</button>
-                                        <button className="flex items-center gap-1 hover:text-red-600 text-red-400"><MdDelete size={14}/> Remove</button>
+                                        <button className="flex items-center gap-1 hover:text-indigo-800" onClick={(e) => e.stopPropagation()}>Edit</button>
+                                        <button 
+                                            className="flex items-center gap-1 hover:text-red-600" 
+                                            onClick={(e) => handleRemoveAddress(e, addr.id)}
+                                        >
+                                            Remove
+                                        </button>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <button className="mt-5 flex items-center gap-2 text-indigo-600 font-bold text-xs border-2 border-dashed border-indigo-100 w-full justify-center py-3 rounded-xl hover:bg-indigo-50 transition-all">
-                            <FaPlus size={10} /> ADD NEW ADDRESS
+                        <button 
+                            onClick={handleAddNewAddress}
+                            className="mt-5 flex items-center gap-2 text-indigo-600 font-bold text-xs border-2 border-dashed border-indigo-100 justify-center py-3 rounded-xl hover:bg-indigo-50 transition-all bg-[rgb(231,231,255)] w-full md:w-[23%]"
+                        >
+                            ADD NEW ADDRESS
                         </button>
                     </div>
 
                     {/* خيارات الشحن */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div className="bg-white p-6 rounded-lg border-0 ">
                         <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
-                            <FaTruck className="text-indigo-600" /> Choose Delivery Speed
+                           Choose Delivery Speed
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {shippingOptions.map((option) => (
@@ -148,49 +164,54 @@ const Payment = () => {
                     </div>
                 </div>
 
-                {/* الجزء الأيمن: ملخص السعر والمنتجات */}
-                <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 sticky top-8">
-                        
-                        <div className="mb-6">
-                            <h4 className="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2 uppercase tracking-wider">
-                                <FaCalendarAlt className="text-indigo-500" /> Delivery Date
+                {/* الجزء الأيمن */}
+                <div className="lg:col-span-1 space-y-6 mt-[11%]">
+                    <div className="bg-white pt-[30px] px-[30px] pb-6 rounded-2xl shadow-sm border border-gray-100 top-8">
+                        <div className="mb-6 rounded-[9px] border p-4 border-gray-100">
+                            <h4 className="text-xs font-bold text-gray-400 mb-4 uppercase tracking-[0.2em]">
+                                Estimated Delivery Date
                             </h4>
-                            <div className="text-xs text-gray-500 space-y-2">
-                                <p className="font-medium text-gray-700">Estimated: 24 Dec 2025</p>
-                                <p>Items will be shipped together.</p>
+                            <div className="space-y-4">
+                                {cartItems.map((item) => (
+                                    <div key={item.id} className="group border-l-2 border-transparent hover:border-indigo-500 pl-3 transition-all">
+                                        <p className="text-sm font-bold text-gray-700 group-hover:text-indigo-600 transition-colors">
+                                            {item.name}
+                                        </p>
+                                        <p className="text-[11px] text-gray-400">{item.deliveryDate}</p>
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
-                        <div className="border-t border-b border-gray-50 py-4 mb-4 space-y-3">
+                        <div className="border-t border-b border-gray-50 py-5 my-6 space-y-4">
                             <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Price Details</h4>
-                            <div className="flex justify-between text-sm text-gray-600">
-                                <span>Order Total</span>
-                                <span className="font-semibold text-gray-800">${cartTotal.toFixed(2)}</span>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-500">Order Total</span>
+                                <span className="font-bold text-gray-800">${cartTotal.toFixed(2)}</span>
                             </div>
-                            <div className="flex justify-between text-sm text-gray-600">
-                                <span>Delivery Charges</span>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-500">Delivery Charges</span>
                                 {currentShippingCost === 0 ? (
-                                    <span className="text-green-500 font-bold">FREE</span>
+                                    <span className="text-green-500 font-bold bg-green-50 px-2 rounded">FREE</span>
                                 ) : (
-                                    <span className="font-semibold text-gray-800">${currentShippingCost.toFixed(2)}</span>
+                                    <span className="font-bold text-gray-800">${currentShippingCost.toFixed(2)}</span>
                                 )}
                             </div>
                         </div>
 
-                        <div className="flex justify-between items-center mb-6">
-                            <span className="font-bold text-gray-800">Total Amount</span>
-                            <span className="font-black text-2xl text-indigo-600">${finalTotal.toFixed(2)}</span>
+                        <div className="flex justify-between items-end mb-8">
+                            <span className="text-sm font-bold text-gray-800">Total Amount</span>
+                            <span className="font-black text-3xl text-indigo-600">${finalTotal.toFixed(2)}</span>
                         </div>
 
-                        <button 
-                            onClick={handlePlaceOrder}
-                            className="group w-full bg-indigo-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 active:scale-95"
-                        >
-                            <AiOutlineCheckCircle size={20} className="group-hover:rotate-12 transition-transform" />
-                            PLACE ORDER
-                        </button>
+  
                     </div>
+                                          <button 
+                            onClick={handlePlaceOrder}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-bold shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2 active:scale-[0.98] transform"
+                        >
+                            <span className="tracking-wide">PLACE ORDER</span>
+                        </button>
                 </div>
 
             </div>
