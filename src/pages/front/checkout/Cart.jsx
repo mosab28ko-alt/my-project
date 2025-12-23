@@ -21,8 +21,7 @@ const PriceRow = memo(({ label, value, isGreen = false, isBold = false }) => (
     </div>
 ));
 
-/** * 2. مكون المنتج (CartItem) - تفعيل زر الحذف X
- */
+
 const CartItem = memo(({ item, onRemove, onUpdateQuantity }) => {
     const handleQtyChange = (e) => {
         const val = parseInt(e.target.value, 10);
@@ -31,7 +30,6 @@ const CartItem = memo(({ item, onRemove, onUpdateQuantity }) => {
 
     return (
         <div className="flex gap-4 p-5 relative group items-start border-b border-gray-100 last:border-0">
-            {/* زر الحذف X المحوط باللون الأحمر في الصورة */}
             <button 
                 onClick={() => onRemove(item.id)}
                 className="absolute top-5 right-5 text-gray-300 hover:text-red-500 transition-colors z-10 p-1"
@@ -126,8 +124,8 @@ const Cart = () => {
                                 </button>
                             </div>
                             <ul className="text-[12px] text-[#71DD37] mt-2 space-y-1 ml-9 font-medium">
-                                <li>• -0% Instant Discount on Bank of America Corp Bank Debit cards</li>
-                                <li>• -50% Cutback Voucher of up to $60 on PayPal transactions.</li>
+                                <li>-0% Instant Discount on Bank of America Corp Bank Debit cards</li>
+                                <li>-50% Cutback Voucher of up to $60 on PayPal transactions.</li>
                             </ul>
                         </div>
                     )}
@@ -157,7 +155,7 @@ const Cart = () => {
                 </div>
 
                 {/* الجزء الأيمن (ملخص السعر) */}
-                <div className="w-full lg:w-80 space-y-4">
+                <div className="w-full lg:w-80 space-y-4 border-[3px] border-[#f9fafb] rounded-[5px]">
                     <SummarySection title="Offer">
                         <div className="flex gap-2 h-10">
                             <input type="text" placeholder="Enter Promo Code" className="flex-grow border border-gray-200 rounded-lg px-4 text-xs outline-none bg-gray-50/50 focus:border-indigo-500" />

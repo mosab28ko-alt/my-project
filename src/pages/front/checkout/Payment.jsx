@@ -137,31 +137,58 @@ const Payment = () => {
                     </div>
 
                     {/* خيارات الشحن */}
-                    <div className="bg-white p-6 rounded-lg border-0 ">
-                        <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
-                           Choose Delivery Speed
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {shippingOptions.map((option) => (
-                                <div 
-                                    key={option.id}
-                                    onClick={() => setShippingSpeed(option.id)}
-                                    className={`p-5 border rounded-xl cursor-pointer text-center transition-all duration-300 ${
-                                        shippingSpeed === option.id 
-                                        ? 'border-indigo-500 bg-indigo-50/20 ring-1 ring-indigo-500' 
-                                        : 'border-gray-200 hover:border-indigo-300'
-                                    }`}
-                                >
-                                    <div className="flex justify-center text-3xl mb-3 transform transition-transform group-hover:scale-110">{option.icon}</div>
-                                    <h4 className="font-bold text-sm mb-1">{option.title}</h4>
-                                    <p className="text-[11px] text-gray-400 mb-3 font-medium">Get it in {option.desc}</p>
-                                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase ${option.price === 0 ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}>
-                                        {option.price === 0 ? 'FREE' : `$${option.price}.00`}
+                <div className="bg-white p-6 rounded-lg border-0">
+                    <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
+                        Choose Delivery Speed
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {shippingOptions.map((option) => (
+                            <div
+                                key={option.id}
+                                onClick={() => setShippingSpeed(option.id)}
+                                className={`relative p-5 border rounded-xl cursor-pointer text-center transition-all duration-300 ${
+                                    shippingSpeed === option.id
+                                        ? 'border-indigo-500 bg-white ring-1 ring-indigo-500'
+                                        : 'border-gray-200 hover:border-indigo-200'
+                                }`}
+                            >
+                                {/* Badge (Free / Price) */}
+                                <div className="absolute top-3 right-3">
+                                    <span className={`text-[11px] font-bold px-2 py-1 rounded-md ${
+                                        option.price === 0 
+                                        ? 'bg-green-100 text-green-600' 
+                                        : 'bg-gray-100 text-gray-500'
+                                    }`}>
+                                        {option.price === 0 ? 'Free' : `$${option.price}`}
                                     </span>
                                 </div>
-                            ))}
-                        </div>
+
+                                {/* Icon */}
+                                <div className="flex justify-center text-3xl mb-3 text-indigo-600">
+                                    {option.icon}
+                                </div>
+
+                                {/* Content */}
+                                <h4 className="font-bold text-gray-800 mb-1">{option.title}</h4>
+                                <p className="text-[12px] text-gray-500 mb-4">Get your product in {option.desc}</p>
+
+                                {/* Custom Radio Circle */}
+                                <div className="flex justify-center mt-2">
+                                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                                        shippingSpeed === option.id 
+                                        ? 'border-indigo-500 bg-indigo-500' // الخلفية زرقاء عند التحديد
+                                        : 'border-gray-300 bg-white'
+                                    }`}>
+                                        {/* النقطة البيضاء الداخلية */}
+                                        <div className={`w-2 h-2 rounded-full bg-white transition-opacity ${
+                                            shippingSpeed === option.id ? 'opacity-100' : 'opacity-0'
+                                        }`} />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
+                </div>
                 </div>
 
                 {/* الجزء الأيمن */}
