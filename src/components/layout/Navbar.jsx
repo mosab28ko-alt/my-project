@@ -34,10 +34,10 @@ const Navbar = () => {
                     <Link to="/team" className="no-underline text-gray-700 font-medium hover:text-indigo-600 transition">
                         Team
                     </Link>
-                    <Link to="/faq" className="no-underline text-gray-700 font-medium hover:text-indigo-600 transition">
+                    <Link to="/pricing" className="no-underline text-gray-700 font-medium hover:text-indigo-600 transition">
                         FAQ
                     </Link>
-                    <Link to="/contact" className="no-underline text-gray-700 font-medium hover:text-indigo-600 transition">
+                    <Link to="/help-center" className="no-underline text-gray-700 font-medium hover:text-indigo-600 transition">
                         Contact us
                     </Link>
 
